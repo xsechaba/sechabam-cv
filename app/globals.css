@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f7f7f7 0%, #e8e8e8 100%);
+    min-height: 100vh;
+  }
+  
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .cv-container {
+    @apply max-w-5xl mx-auto bg-white shadow-strong rounded-2xl overflow-hidden;
+    min-height: 100vh;
+    backdrop-filter: blur(10px);
+  }
+  
+  .name-gradient {
+    background: linear-gradient(135deg, #284b63 0%, #3c6e71 50%, #539a9e 100%);
+  }
+  
+  .section-divider {
+    @apply border-t border-platinum-300 my-8;
+  }
+  
+  .star-icon {
+    @apply text-caribbean_current-600 inline-block ml-3 animate-float;
+  }
+  
+  .section-card {
+    @apply bg-card-gradient rounded-xl p-6 shadow-soft border border-platinum-200;
+    transition: all 0.3s ease;
+  }
+  
+  .section-card:hover {
+    @apply shadow-medium transform -translate-y-1;
+  }
+  
+  .contact-item {
+    @apply flex items-center gap-3 text-jet-600 hover:text-indigo_dye-600 transition-colors duration-300;
+  }
+  
+  .social-link {
+    @apply flex items-center gap-2 text-caribbean_current-600 hover:text-indigo_dye-600 transition-all duration-300 hover:scale-105 font-medium;
+  }
+  
+  .experience-item {
+    @apply border-l-4 border-caribbean_current-200 pl-4 py-2;
+    transition: all 0.3s ease;
+  }
+  
+  .experience-item:hover {
+    @apply border-caribbean_current-500 bg-platinum-900;
+  }
+  
+  .skill-tag {
+    @apply inline-block bg-caribbean_current-100 text-caribbean_current-700 px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 border border-caribbean_current-200;
+    transition: all 0.3s ease;
+  }
+  
+  .skill-tag:hover {
+    @apply bg-caribbean_current-200 text-caribbean_current-800 border-caribbean_current-300 transform scale-105 shadow-soft;
+  }
+}
