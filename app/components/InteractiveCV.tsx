@@ -1,371 +1,361 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Linkedin, 
-  ExternalLink, 
-  Github, 
-  Download, 
-  Star, 
-  Code, 
-  Database, 
-  Cloud, 
-  Zap,
-  Sparkles,
-  Award,
-  Briefcase,
-  BookOpen,
-  FolderOpen
-} from 'lucide-react'
-import { getProfessionalPortrait } from '../utils/pexels'
+import Image from 'next/image'
+import { Mail, Phone, MapPin, Linkedin, Github, ExternalLink, Download, Eye } from 'lucide-react'
+
+interface Skill {
+  name: string
+  category: string
+  level: number
+}
+
+interface Project {
+  title: string
+  description: string
+  technologies: string[]
+  github?: string
+  live?: string
+  image?: string
+}
 
 export default function InteractiveCV() {
-  const [activeSection, setActiveSection] = useState('summary')
+  const [activeSection, setActiveSection] = useState('education')
   const [isVisible, setIsVisible] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [profileImage, setProfileImage] = useState('/default-profile.jpg')
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
     setIsVisible(true)
-    
-    // Fetch profile image
-    getProfessionalPortrait().then(setProfileImage)
     
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY })
     }
     
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousemove', handleMouseMove)
+      return () => window.removeEventListener('mousemove', handleMouseMove)
+    }
   }, [])
 
-  const handleDownload = () => {
-    // Implementation for CV download
-    console.log('Downloading CV...')
+  if (!isClient) {
+    return (
+      <div className="cv-container p-8 md:p-12 animate-fade-in relative overflow-hidden">
+        <div className="flex items-center justify-center min-h-[600px]">
+          <div className="text-white text-xl">Loading...</div>
+        </div>
+      </div>
+    )
   }
 
   const skillCategories = {
-    'Programming Languages': [
-      { name: 'Python', icon: <Code className="w-5 h-5" /> },
-      { name: 'JavaScript', icon: <Code className="w-5 h-5" /> },
-      { name: 'PHP', icon: <Code className="w-5 h-5" /> },
-      { name: 'SQL', icon: <Database className="w-5 h-5" /> },
-      { name: 'HTML/CSS', icon: <Code className="w-5 h-5" /> }
-    ],
-    'Frameworks & Libraries': [
-      { name: 'Laravel', icon: <Code className="w-5 h-5" /> },
-      { name: 'Vue.js', icon: <Code className="w-5 h-5" /> },
-      { name: 'Tailwind CSS', icon: <Code className="w-5 h-5" /> },
-      { name: 'Blade', icon: <Code className="w-5 h-5" /> },
-      { name: 'Axios', icon: <Code className="w-5 h-5" /> }
-    ],
-    'Cloud & DevOps': [
-      { name: 'AWS', icon: <Cloud className="w-5 h-5" /> },
-      { name: 'Docker', icon: <Zap className="w-5 h-5" /> },
-      { name: 'Git', icon: <Zap className="w-5 h-5" /> },
-      { name: 'GitHub Actions', icon: <Zap className="w-5 h-5" /> },
-      { name: 'Apache Airflow', icon: <Zap className="w-5 h-5" /> }
-    ],
-    'Data Engineering': [
-      { name: 'ETL Pipelines', icon: <Database className="w-5 h-5" /> },
-      { name: 'PostgreSQL', icon: <Database className="w-5 h-5" /> },
-      { name: 'MySQL', icon: <Database className="w-5 h-5" /> },
-      { name: 'Apache Spark', icon: <Database className="w-5 h-5" /> },
-      { name: 'Hadoop', icon: <Database className="w-5 h-5" /> }
-    ]
+    'Programming & Query Languages': ['PHP', 'JavaScript', 'Python', 'SQL', 'HTML', 'CSS'],
+    'Frameworks & Libraries': ['Laravel', 'Vue.js', 'Tailwind CSS', 'Blade', 'Axios'],
+    'Cloud & APIs': ['OpenAI API', 'AWS (S3, Lambda, API Gateway, CloudFront, Route 53)'],
+    'Data Engineering': ['ETL pipelines', 'Data Storage', 'PostgreSQL', 'MySQL', 'Apache Spark', 'Hadoop'],
+    'DevOps & Tools': ['Git', 'GitHub Actions', 'Laravel Sail', 'Docker', 'Apache Airflow']
   }
 
-  const projects = [
+  const projects: Project[] = [
     {
       title: 'Traffic Optimization Engine',
       description: 'Real-time optimizer using Kafka, Spark Streaming, and ML for live route planning and congestion prediction, with a React dashboard.',
-      tech: ['Kafka', 'Spark', 'React', 'ML']
+      technologies: ['Kafka', 'Spark', 'React', 'ML'],
+      github: '#',
+      live: '#'
     },
     {
       title: 'Real-Time Financial Market Data Pipeline',
-      description: 'Engineered with Docker, Apache Airflow, PostgreSQL for trading analysis.',
-      tech: ['Docker', 'Airflow', 'PostgreSQL']
+      description: 'Engineered a real-time pipeline processing market data for time-sensitive trading analysis using Docker, Apache Airflow, and PostgreSQL.',
+      technologies: ['Docker', 'Airflow', 'PostgreSQL'],
+      github: '#',
+      live: '#'
     },
     {
       title: 'End-to-End Crypto Twitter Data Pipeline',
-      description: 'Built with Twitter API, Apache Airflow, PostgreSQL for data extraction and analysis.',
-      tech: ['Twitter API', 'Airflow', 'PostgreSQL']
+      description: 'Built a pipeline with Twitter API, Apache Airflow, and PostgreSQL to extract, clean, and analyze crypto-related tweets.',
+      technologies: ['Twitter API', 'Airflow', 'PostgreSQL'],
+      github: '#',
+      live: '#'
     },
     {
       title: 'Emotions Data Analysis Using Twitter Data',
-      description: 'Analyzed social media patterns of emotional expression using Python.',
-      tech: ['Python', 'NLP', 'Data Analysis']
+      description: 'Analyzed social media messages to identify patterns in emotional expression using Python.',
+      technologies: ['Python', 'Data Analysis', 'Social Media'],
+      github: '#',
+      live: '#'
     }
   ]
 
-  const SkillItem = ({ skill }: { skill: { name: string; icon: React.ReactNode } }) => (
-    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-glass-200 transition-all duration-300 group border border-transparent hover:border-accent-300">
-      <span className="text-accent-400 group-hover:scale-110 transition-transform">
-        {skill.icon}
-      </span>
-      <span className="font-medium text-white">{skill.name}</span>
+  const handleDownload = () => {
+    const link = document.createElement('a')
+    link.href = '/assets/Sechaba_Mohlabeng_CV.pdf'
+    link.download = 'Sechaba_Mohlabeng_CV.pdf'
+    link.click()
+  }
+
+  const SkillItem = ({ skill }: { skill: string }) => (
+    <div className="flex items-center gap-4 p-4 rounded-2xl transition-all duration-400 group border backdrop-blur-10 bg-white/5 border-white/10 hover:bg-white/10 hover:border-cyan-400/30 hover:scale-105 hover:shadow-lg relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
+      <span className="font-semibold text-white group-hover:text-cyan-100 relative z-10">{skill}</span>
     </div>
   )
 
-  const ProjectCard = ({ project }: { project: typeof projects[0] }) => (
-    <div className="glass-card p-6 group">
-      <h4 className="font-sans font-semibold text-white text-lg mb-3 group-hover:text-accent-300 transition-colors">
+  const ProjectCard = ({ project, index }: { project: Project; index: number }) => (
+    <div 
+      className="section-card group cursor-pointer transform hover:scale-105 transition-all duration-500 relative overflow-hidden"
+      style={{ animationDelay: `${0.8 + index * 0.1}s` }}
+    >
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <h3 className="font-sans font-bold text-white text-xl mb-4 group-hover:text-cyan-400 transition-colors relative z-10">
         {project.title}
-      </h4>
-      <p className="text-sm text-gray-300 leading-relaxed mb-4">
-        {project.description}
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {project.tech.map((tech) => (
-          <span key={tech} className="skill-tag text-xs">
-            {tech}
-          </span>
+      </h3>
+      <p className="text-sm text-white/70 mb-6 leading-relaxed relative z-10">{project.description}</p>
+      <div className="flex flex-wrap gap-2 mb-6 relative z-10">
+        {project.technologies.map((tech) => (
+          <span key={tech} className="skill-tag text-xs font-semibold">{tech}</span>
         ))}
+      </div>
+      <div className="flex gap-4 relative z-10">
+        {project.github && (
+          <a href={project.github} className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 hover:scale-110 transition-all duration-400 text-sm font-semibold px-4 py-2 rounded-xl bg-white/5 backdrop-blur-5 border border-white/20 hover:bg-white/10 hover:border-cyan-400/50">
+            <Github className="w-4 h-4" />
+            <span>Code</span>
+          </a>
+        )}
+        {project.live && (
+          <a href={project.live} className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 hover:scale-110 transition-all duration-400 text-sm font-semibold px-4 py-2 rounded-xl bg-white/5 backdrop-blur-5 border border-white/20 hover:bg-white/10 hover:border-cyan-400/50">
+            <Eye className="w-4 h-4" />
+            <span>Live</span>
+          </a>
+        )}
       </div>
     </div>
   )
 
   return (
-    <div className="cv-container p-8 md:p-12 animate-fade-in relative overflow-hidden max-w-6xl mx-auto">
+    <div className="cv-container p-8 md:p-12 animate-fade-in relative overflow-hidden">
       {/* Interactive Background Elements */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-5"
+        className="absolute inset-0 pointer-events-none opacity-20"
         style={{
-          background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(99, 102, 241, 0.1) 0%, transparent 50%)`
+          background: typeof window !== 'undefined' ? `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 212, 255, 0.08) 0%, rgba(255, 215, 0, 0.04) 30%, transparent 60%)` : 'none',
+          transition: 'all 0.2s ease-out'
         }}
       />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-cyan-400/5 to-blue-400/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-gradient-to-l from-yellow-400/5 to-cyan-400/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
       
-      {/* Floating Elements */}
-      <div className="floating-element"></div>
-      <div className="floating-element"></div>
-      <div className="floating-element"></div>
-
+      {/* Main Layout with Left Sidebar */}
       <div className="flex flex-col lg:flex-row gap-8 relative z-10">
-        {/* Left Sidebar - Profile & Contact */}
-        <div className="lg:w-80 flex-shrink-0">
+        {/* Left Sidebar - Header Section */}
+        <div className="lg:w-64 flex-shrink-0 animate-slide-up">
           <div className="sticky top-8 space-y-6">
-            {/* Profile Image */}
-            <div className="profile-image-container">
-              <img 
-                src={profileImage} 
+            {/* Professional Portrait - Clean & Unblurred */}
+            <div className="relative w-full h-56 rounded-2xl overflow-hidden shadow-xl ring-1 ring-white/20 backdrop-blur-sm bg-gradient-to-br from-white/10 to-transparent">
+              <Image 
+                src="/assets/profile-picture.png" 
                 alt="Sechaba Mohlabeng" 
-                className="profile-image"
-                onError={(e) => {
-                  e.currentTarget.src = '/default-profile.jpg'
-                }}
+                fill 
+                className="object-cover" 
+                sizes="256px" 
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
             </div>
 
-            {/* Name & Title */}
-            <div className="name-gradient p-6 rounded-2xl text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              <h1 className="text-2xl lg:text-3xl font-display font-bold text-white mb-2 leading-tight relative z-10">
+            {/* Name and Title */}
+            <div className="name-gradient p-6 rounded-2xl shadow-medium relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <h1 className="text-2xl lg:text-3xl font-serif font-bold text-white mb-2 leading-tight relative z-10">
                 Sechaba Itumeleng Mohlabeng
               </h1>
               <p className="text-base lg:text-lg font-sans font-medium tracking-widest text-white/90 relative z-10">
-                CLOUD DATA ENGINEER
+                DATA AND SOFTWARE ENGINEER
               </p>
             </div>
-
+            
             {/* Contact Information */}
-            <div className="glass-card p-6 space-y-4">
+            <div className="space-y-4 text-white/80">
               <div className="contact-item">
-                <Mail className="w-5 h-5 text-accent-400" />
+                <Mail className="w-5 h-5 text-cyan-400" />
                 <span className="font-medium text-white">xsechaba@gmail.com</span>
               </div>
               <div className="contact-item">
-                <Phone className="w-5 h-5 text-accent-400" />
+                <Phone className="w-5 h-5 text-cyan-400" />
                 <span className="font-medium text-white">(+27) 79 158 4303</span>
               </div>
               <div className="contact-item">
-                <MapPin className="w-5 h-5 text-accent-400" />
+                <MapPin className="w-5 h-5 text-cyan-400" />
                 <span className="font-medium text-white">Johannesburg, South Africa</span>
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="glass-card p-6">
-              <div className="flex flex-col gap-3">
-                <a href="#" className="social-link">
-                  <Linkedin className="w-5 h-5" />
-                  <span className="font-medium">LinkedIn</span>
-                </a>
-                <a href="#" className="social-link">
-                  <ExternalLink className="w-5 h-5" />
-                  <span className="font-medium">Portfolio</span>
-                </a>
-                <a href="#" className="social-link">
-                  <Github className="w-5 h-5" />
-                  <span className="font-medium">GitHub</span>
-                </a>
-                <button onClick={handleDownload} className="download-btn flex items-center justify-center gap-2">
-                  <Download className="w-4 h-4" />
-                  <span>Download CV</span>
-                </button>
-              </div>
+            <div className="flex flex-col gap-3">
+              <a href="#" className="social-link">
+                <Linkedin className="w-5 h-5" />
+                <span className="font-medium">LinkedIn</span>
+              </a>
+              <a href="#" className="social-link">
+                <ExternalLink className="w-5 h-5" />
+                <span className="font-medium">Portfolio</span>
+              </a>
+              <a href="#" className="social-link">
+                <Github className="w-5 h-5" />
+                <span className="font-medium">GitHub</span>
+              </a>
+              <button 
+                onClick={handleDownload}
+                className="social-link bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download CV</span>
+              </button>
             </div>
 
             {/* Career Summary */}
-            <div className="glass-card p-6 group">
+            <div className="section-card group">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-gold-400 group-hover:animate-spin transition-all" />
-                <h3 className="font-display text-xl font-semibold text-white">Career Summary</h3>
+                <h3 className="font-serif text-lg font-semibold text-white">
+                  Career Summary
+                </h3>
               </div>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Dynamic and detail-oriented Cloud Data Engineer with a background in Quantity Surveying (Hons) and expertise in building and optimizing scalable data architectures. Proficient in AWS cloud technologies, ETL pipelines, and data analytics, with a proven ability to extract actionable insights and drive business solutions. Passionate about solving complex challenges with data-driven strategies.
-              </p>
+                              <p className="text-sm text-white/80 leading-relaxed">
+                  Dynamic and results-driven Engineer with a background in Quantity Surveying (Hons) and proven expertise in designing, building, and optimizing scalable data systems. Skilled in AWS cloud technologies, ETL pipeline development, and data analytics, with hands-on experience delivering end-to-end software and data solutions. Adept at extracting actionable insights, architecting robust applications, and driving business impact through data-driven strategies. Passionate about solving complex technical challenges and continuously advancing engineering excellence.
+                </p>
             </div>
           </div>
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 space-y-8">
-          {/* Navigation Tabs */}
-          <div className="flex flex-wrap gap-3">
-            {[
-              { id: 'summary', label: 'Summary', icon: <Sparkles className="w-4 h-4" /> },
-              { id: 'experience', label: 'Experience', icon: <Briefcase className="w-4 h-4" /> },
-              { id: 'education', label: 'Education', icon: <BookOpen className="w-4 h-4" /> },
-              { id: 'projects', label: 'Projects', icon: <FolderOpen className="w-4 h-4" /> },
-              { id: 'skills', label: 'Skills', icon: <Award className="w-4 h-4" /> }
-            ].map((tab) => (
+        <div className="flex-1">
+          {/* Navigation Tabs - Enhanced Glassmorphism */}
+          <div className="flex flex-wrap gap-3 mb-10">
+            {['education', 'experience', 'skills', 'projects'].map((section) => (
               <button
-                key={tab.id}
-                onClick={() => setActiveSection(tab.id)}
-                className={`nav-tab flex items-center gap-2 ${activeSection === tab.id ? 'active' : ''}`}
+                key={section}
+                onClick={() => setActiveSection(section)}
+                className={`relative px-8 py-4 rounded-2xl font-semibold transition-all duration-500 border backdrop-blur-15 overflow-hidden group ${
+                  activeSection === section
+                    ? 'bg-gradient-to-r from-cyan-500/80 to-blue-600/80 text-white border-white/30 shadow-xl scale-105'
+                    : 'bg-white/5 text-white border-white/20 hover:bg-white/10 hover:border-cyan-400/50 hover:text-cyan-300 hover:scale-102'
+                }`}
               >
-                {tab.icon}
-                {tab.label}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                <span className="relative z-10">
+                  {section.charAt(0).toUpperCase() + section.slice(1)}
+                </span>
               </button>
             ))}
           </div>
 
-          {/* Dynamic Content */}
+          {/* Dynamic Content Based on Active Section */}
           <div className="min-h-[600px]">
-            {activeSection === 'summary' && (
-              <div className="glass-card p-8 animate-slide-up">
-                <h2 className="font-display text-3xl font-semibold text-white mb-6 flex items-center">
-                  Professional Summary
-                  <Star className="star-icon w-6 h-6 ml-3" />
-                </h2>
-                <div className="prose prose-invert max-w-none">
-                  <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                    I am a passionate Cloud Data Engineer with a unique blend of technical expertise and business acumen. My journey from Quantity Surveying to Data Engineering has equipped me with a comprehensive understanding of both the technical and business aspects of data-driven solutions.
-                  </p>
-                  <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                    With hands-on experience in AWS cloud technologies, ETL pipeline development, and data analytics, I specialize in building scalable architectures that transform raw data into actionable business insights. My background in construction and project management has instilled in me a methodical approach to problem-solving and a keen eye for detail.
-                  </p>
-                  <p className="text-lg text-gray-300 leading-relaxed">
-                    I thrive in dynamic environments where I can leverage my technical skills to solve complex challenges and drive innovation through data-driven strategies.
-                  </p>
+            {activeSection === 'education' && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* Education Section */}
+                <div className="section-card animate-slide-up">
+                  <h2 className="font-serif text-2xl font-semibold text-white mb-6">
+                    Education
+                  </h2>
+                  <div className="space-y-6">
+                    <div className="experience-item">
+                      <p className="font-sans font-bold text-cyan-400 text-lg">Dec 2024</p>
+                      <p className="font-sans font-semibold text-white text-base">Higher Certificate in Information Technology Systems, Data Engineering</p>
+                      <p className="font-sans text-sm text-white/60">Explore AI Academy</p>
+                    </div>
+                    <div className="experience-item">
+                      <p className="font-sans font-bold text-cyan-400 text-lg">Dec 2023</p>
+                      <p className="font-sans font-semibold text-white text-base">Bachelor of Science (Hons), Quantity Surveying</p>
+                      <p className="font-sans text-sm text-white/60">University of the Witwatersrand</p>
+                    </div>
+                    <div className="experience-item">
+                      <p className="font-sans font-bold text-cyan-400 text-lg">Dec 2022</p>
+                      <p className="font-sans font-semibold text-white text-base">Bachelor of Science, Construction Studies</p>
+                      <p className="font-sans text-sm text-white/60">University of the Witwatersrand</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Certifications Section */}
+                <div className="section-card animate-slide-up" style={{animationDelay: '0.1s'}}>
+                  <h2 className="font-serif text-2xl font-semibold text-white mb-6">
+                    Certifications
+                  </h2>
+                  <div className="space-y-4">
+                    <div className="experience-item">
+                      <p className="font-sans font-semibold text-white">AWS Certified Cloud Practitioner</p>
+                      <p className="font-sans text-sm text-white/60">AWS (2022)</p>
+                    </div>
+                    <div className="experience-item">
+                      <p className="font-sans font-semibold text-white">S201 and S202 Digital Planning with Candy</p>
+                      <p className="font-sans text-sm text-white/60">RIB CCS Academy (2021)</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
 
             {activeSection === 'experience' && (
-              <div className="space-y-6">
-                <div className="glass-card p-8 animate-slide-up">
-                  <h2 className="font-display text-3xl font-semibold text-white mb-6 flex items-center">
-                    Work Experience
-                    <Star className="star-icon w-6 h-6 ml-3" />
-                  </h2>
-                  <div className="space-y-6">
-                    <div className="experience-item">
-                      <p className="font-sans font-bold text-accent-400 text-lg">Apr 2025 – June 2025</p>
-                      <p className="font-sans font-semibold text-white text-lg">Software Engineer (Internship)</p>
-                      <p className="font-sans text-sm text-gold-400 font-medium mb-3">Claimtech | Remote</p>
-                      <ul className="text-sm text-gray-300 space-y-2 list-disc list-inside">
-                        <li>Built scalable features in a Laravel + Vue.js system, including server-side pagination, filtering, and dynamic UI components.</li>
-                        <li>Developed an ensemble-based matching system using OpenAI, Gemini, and Levenshtein logic for intelligent claim validation.</li>
-                        <li>Documented workflow automations (crons, webhooks, status transitions) through technical diagrams and improved developer onboarding.</li>
-                      </ul>
-                    </div>
+              <div className="section-card animate-slide-up">
+                <h2 className="font-serif text-2xl font-semibold text-white mb-6">
+                  Work Experience
+                </h2>
+                                  <div className="space-y-8">
+                                          <div className="experience-item">
+                        <p className="font-sans font-bold text-cyan-400 text-lg">Jan 2025 – Aug 2025</p>
+                        <p className="font-sans font-semibold text-white text-lg">Software Engineer (Graduate/Junior)</p>
+                        <p className="font-sans text-sm text-cyan-400 font-medium mb-3">Claimtech | Remote</p>
+                        <ul className="text-sm text-white/70 space-y-2 list-disc list-inside">
+                          <li>Built scalable features in a Laravel + Vue.js system, including server-side pagination, filtering, and dynamic UI components.</li>
+                          <li>Developed an ensemble-based matching system using OpenAI, Gemini, and Levenshtein logic for intelligent claim validation.</li>
+                          <li>Documented workflow automations (crons, webhooks, status transitions) through technical diagrams and enhanced developer onboarding documentation.</li>
+                        </ul>
+                      </div>
 
                     <div className="experience-item">
-                      <p className="font-sans font-bold text-accent-400 text-lg">Sept 2024 – Dec 2024</p>
+                      <p className="font-sans font-bold text-cyan-400 text-lg">Sept 2024 – Dec 2024</p>
                       <p className="font-sans font-semibold text-white text-lg">Data Engineer (Internship)</p>
-                      <p className="font-sans text-sm text-gold-400 font-medium mb-3">Sand Technologies | Remote</p>
-                      <ul className="text-sm text-gray-300 space-y-2 list-disc list-inside">
+                      <p className="font-sans text-sm text-cyan-400 font-medium mb-3">Sand Technologies | Remote</p>
+                      <ul className="text-sm text-white/70 space-y-2 list-disc list-inside">
                         <li>Led the development of a universal web scraper with proxy management and pagination for dynamic websites.</li>
                         <li>Built scalable data pipelines to automate attendee data integration for sales.</li>
                         <li>Managed AWS infrastructure, ensuring secure and efficient data storage and retrieval.</li>
                       </ul>
                     </div>
 
-                    <div className="experience-item">
-                      <p className="font-sans font-bold text-accent-400 text-lg">Jan 2024 – Aug 2024</p>
-                      <p className="font-sans font-semibold text-white text-lg">Data Engineer (Apprenticeship)</p>
-                      <p className="font-sans text-sm text-gold-400 font-medium mb-3">Explore AI | Remote</p>
-                      <ul className="text-sm text-gray-300 space-y-2 list-disc list-inside">
-                        <li>Automated data integration for sales pipelines, ensuring efficiency and accuracy.</li>
-                        <li>Gained hands-on experience with AWS, SQL, Python, and Apache Airflow while building real-world data pipelines.</li>
-                        <li>Managed cloud infrastructure, optimizing secure data storage and retrieval.</li>
-                      </ul>
-                    </div>
+                                          <div className="experience-item">
+                        <p className="font-sans font-bold text-cyan-400 text-lg">Jan 2024 – Aug 2024</p>
+                        <p className="font-sans font-semibold text-white text-lg">Data Engineer (Apprenticeship)</p>
+                        <p className="font-sans text-sm text-cyan-400 font-medium mb-3">Explore AI | Remote</p>
+                        <ul className="text-sm text-white/70 space-y-2 list-disc list-inside">
+                          <li>Worked on automating data integration for sales pipelines, ensuring efficiency and accuracy in business processes.</li>
+                          <li>Gained hands-on experience with AWS services, SQL, Python, and Apache Airflow while building real-world data pipelines.</li>
+                          <li>Managed cloud infrastructure, optimizing data storage and retrieval in a secure environment.</li>
+                        </ul>
+                      </div>
 
-                    <div className="experience-item">
-                      <p className="font-sans font-bold text-accent-400 text-lg">Aug 2020 – Feb 2021</p>
-                      <p className="font-sans font-semibold text-white text-lg">Student Quantity Surveyor (Seasonal)</p>
-                      <p className="font-sans text-sm text-gold-400 font-medium mb-3">Barrow Construction | Johannesburg, ZA</p>
-                      <ul className="text-sm text-gray-300 space-y-2 list-disc list-inside">
-                        <li>Conducted cost analysis and supported value engineering efforts.</li>
-                        <li>Monitored project progress and costs, contributing to accurate forecasting.</li>
-                        <li>Participated in site visits, contractor meetings, and negotiations.</li>
-                      </ul>
-                    </div>
+                                          <div className="experience-item">
+                        <p className="font-sans font-bold text-cyan-400 text-lg">Aug 2020 – Feb 2021</p>
+                        <p className="font-sans font-semibold text-white text-lg">Student Quantity Surveyor (Seasonal)</p>
+                        <p className="font-sans text-sm text-cyan-400 font-medium mb-3">Barrow Construction | Johannesburg, ZA</p>
+                        <ul className="text-sm text-white/70 space-y-2 list-disc list-inside">
+                          <li>Conducted cost analysis and supported value engineering efforts to optimize project expenses.</li>
+                          <li>Monitored project progress and costs, contributing to accurate forecasting.</li>
+                          <li>Participated in site visits, contractor meetings, and negotiations.</li>
+                        </ul>
+                      </div>
                   </div>
-                </div>
-              </div>
-            )}
-
-            {activeSection === 'education' && (
-              <div className="glass-card p-8 animate-slide-up">
-                <h2 className="font-display text-3xl font-semibold text-white mb-6 flex items-center">
-                  Education
-                  <Star className="star-icon w-6 h-6 ml-3" />
-                </h2>
-                <div className="space-y-6">
-                  <div className="experience-item">
-                    <p className="font-sans font-bold text-accent-400 text-lg">Dec 2024</p>
-                    <p className="font-sans font-semibold text-white text-lg">Higher Certificate in Information Technology Systems, Data Engineering</p>
-                    <p className="font-sans text-sm text-gold-400 font-medium">Explore AI Academy</p>
-                  </div>
-                  <div className="experience-item">
-                    <p className="font-sans font-bold text-accent-400 text-lg">Dec 2023</p>
-                    <p className="font-sans font-semibold text-white text-lg">Bachelor of Science (Hons), Quantity Surveying</p>
-                    <p className="font-sans text-sm text-gold-400 font-medium">University of the Witwatersrand</p>
-                  </div>
-                  <div className="experience-item">
-                    <p className="font-sans font-bold text-accent-400 text-lg">Dec 2022</p>
-                    <p className="font-sans font-semibold text-white text-lg">Bachelor of Science, Construction Studies</p>
-                    <p className="font-sans text-sm text-gold-400 font-medium">University of the Witwatersrand</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeSection === 'projects' && (
-              <div className="glass-card p-8 animate-slide-up">
-                <h2 className="font-display text-3xl font-semibold text-white mb-6 flex items-center">
-                  Technical Projects
-                  <Star className="star-icon w-6 h-6 ml-3" />
-                </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {projects.map((project, index) => (
-                    <ProjectCard key={index} project={project} />
-                  ))}
-                </div>
               </div>
             )}
 
             {activeSection === 'skills' && (
-              <div className="glass-card p-8 animate-slide-up">
-                <h2 className="font-display text-3xl font-semibold text-white mb-6 flex items-center">
+              <div className="section-card animate-slide-up">
+                <h2 className="font-serif text-2xl font-semibold text-white mb-6">
                   Skills & Expertise
-                  <Star className="star-icon w-6 h-6 ml-3" />
                 </h2>
                 <div className="space-y-8">
                   <div>
@@ -373,27 +363,35 @@ export default function InteractiveCV() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {Object.entries(skillCategories).map(([category, skills]) => (
                         <div key={category} className="space-y-4">
-                          <h5 className="font-sans font-semibold text-accent-400 text-base border-b border-accent-300 pb-2">
+                          <h5 className="font-sans font-semibold text-cyan-400 text-base border-b border-cyan-400/20 pb-2">
                             {category}
                           </h5>
-                          <div className="grid grid-cols-1 gap-2">
-                            {skills.map((skill) => (
-                              <SkillItem key={skill.name} skill={skill} />
-                            ))}
-                          </div>
+                                                     <div className="grid grid-cols-1 gap-2">
+                             {skills.map((skill) => (
+                               <SkillItem key={skill} skill={skill} />
+                             ))}
+                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
                     <h4 className="font-sans font-bold text-white mb-4 text-lg">Interpersonal Skills</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {['Problem-Solving', 'Project Management', 'Effective Communication', 'Adaptability', 'Multitasking', 'Highly Organized'].map((skill) => (
-                        <span key={skill} className="skill-tag">{skill}</span>
-                      ))}
-                    </div>
+                                          <div className="flex flex-wrap gap-2">
+                        {['Problem-Solving', 'Project Management', 'Effective Communication', 'Adaptability', 'Strong multitasking abilities', 'Highly organized'].map((skill) => (
+                          <span key={skill} className="skill-tag">{skill}</span>
+                        ))}
+                      </div>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {activeSection === 'projects' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {projects.map((project, index) => (
+                  <ProjectCard key={project.title} project={project} index={index} />
+                ))}
               </div>
             )}
           </div>

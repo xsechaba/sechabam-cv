@@ -2,12 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Sechaba Mohlabeng - Cloud Data Engineer',
-  description: 'Professional CV and portfolio of Sechaba Itumeleng Mohlabeng, a Cloud Data Engineer with expertise in AWS, ETL pipelines, and data analytics.',
-  keywords: 'Cloud Data Engineer, AWS, ETL, Data Analytics, Python, SQL, Johannesburg',
-  authors: [{ name: 'Sechaba Mohlabeng' }],
-  viewport: 'width=device-width, initial-scale=1',
-  robots: 'index, follow',
+  title: 'Sechaba Itumeleng Mohlabeng - CV',
+  description: 'Data and Software Engineer CV - Sechaba Itumeleng Mohlabeng',
 }
 
 export default function RootLayout({
@@ -17,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className="bg-cv-bg min-h-screen">
         {children}
       </body>
     </html>
